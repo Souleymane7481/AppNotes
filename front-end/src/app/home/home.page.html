@@ -1,0 +1,80 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <div class="header-title">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>NoteApp</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-icon">
+      <ion-icon name="school-outline"></ion-icon>
+    </div>
+    <h1 class="hero-title">Bienvenue !</h1>
+    <p class="hero-subtitle">Gérez vos notes et suivez vos performances académiques en toute simplicité</p>
+  </div>
+
+  <!-- Cards Menu -->
+  <div class="cards-container">
+    
+    <div class="action-card" routerLink="/add-note">
+      <div class="card-icon success">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </div>
+      <div class="card-content">
+        <h3>Ajouter une note</h3>
+        <p>Enregistrer rapidement vos nouvelles notes</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="action-card" routerLink="/notes">
+      <div class="card-icon primary">
+        <ion-icon name="list-outline"></ion-icon>
+      </div>
+      <div class="card-content">
+        <h3>Mes notes</h3>
+        <p>Consulter et gérer toutes vos notes</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+    <div class="action-card" routerLink="/averages">
+      <div class="card-icon tertiary">
+        <ion-icon name="calculator-outline"></ion-icon>
+      </div>
+      <div class="card-content">
+        <h3>Moyennes</h3>
+        <p>Calculer et analyser vos résultats</p>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="card-arrow"></ion-icon>
+    </div>
+
+  </div>
+
+  <!-- Stats Preview (optionnel) -->
+  <div class="stats-preview">
+    <div class="stat-item">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalNotes }}</span>
+        <span class="stat-label">Notes</span>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <ion-icon name="trending-up-outline"></ion-icon>
+      <div class="stat-info">
+        <span class="stat-value">{{ averageScore }}</span>
+        <span class="stat-label">Moyenne</span>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

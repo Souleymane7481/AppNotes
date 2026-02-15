@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Ajouter une note</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Ajouter une note</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">ID Étudiant *</ion-label>
+          <ion-input [(ngModel)]="studentId" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Nom de l’étudiant *</ion-label>
+          <ion-input [(ngModel)]="studentName" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Score *</ion-label>
+          <ion-input [(ngModel)]="score" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Cours *</ion-label>
+          <ion-input [(ngModel)]="course" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Semestre *</ion-label>
+          <ion-input [(ngModel)]="semester" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Coefficient</ion-label>
+          <ion-input [(ngModel)]="coefficient" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12" class="ion-padding-top">
+        <ion-button expand="block" (click)="addNote()">Ajouter la note</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

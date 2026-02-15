@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Notes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Notes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list *ngIf="!loading; else loadingTpl">
+    <ion-item *ngFor="let note of notes" (click)="goToDetail(note._id)">
+      <ion-label>
+        <h2>{{ note.studentName }} (ID: {{ note.studentId }})</h2>
+        <p>{{ note.course }} - Semestre {{ note.semester }} - Score: {{ note.score }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #loadingTpl>
+    <p class="ion-padding">Chargement des notes...</p>
+  </ng-template>
+</ion-content>

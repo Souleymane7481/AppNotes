@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">noteAPP</string>
+    <string name="title_activity_main">noteAPP</string>
+    <string name="package_name">com.isge.noteapp</string>
+    <string name="custom_url_scheme">com.isge.noteapp</string>
+</resources>

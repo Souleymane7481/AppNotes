@@ -1,0 +1,71 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Détail de la note</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Détail de la note</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid *ngIf="note; else loadingTpl">
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">ID Étudiant *</ion-label>
+          <ion-input [(ngModel)]="studentId" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Nom de l’étudiant *</ion-label>
+          <ion-input [(ngModel)]="studentName" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Score *</ion-label>
+          <ion-input [(ngModel)]="score" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Cours *</ion-label>
+          <ion-input [(ngModel)]="course" type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Semestre *</ion-label>
+          <ion-input [(ngModel)]="semester" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Coefficient</ion-label>
+          <ion-input [(ngModel)]="coefficient" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12" class="ion-padding-top">
+        <ion-button expand="block" (click)="updateNote()">Mettre à jour</ion-button>
+      </ion-col>
+
+      <ion-col size="12" class="ion-padding-top">
+        <ion-button color="danger" expand="block" (click)="deleteNote()">Supprimer la note</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ng-template #loadingTpl>
+    <p class="ion-padding">Chargement de la note...</p>
+  </ng-template>
+</ion-content>

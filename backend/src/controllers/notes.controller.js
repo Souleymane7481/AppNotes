@@ -1,6 +1,7 @@
 const Note = require('../models/Note');
+const Average = require('../models/Average');
 
-// Ajouter une note
+// CRUD Notes
 exports.createNote = async (req, res) => {
   try {
     const { studentId, studentName, score, course, semester, coefficient } = req.body;
@@ -12,7 +13,6 @@ exports.createNote = async (req, res) => {
   }
 };
 
-// Lister toutes les notes ou filtrer par étudiant
 exports.getNotes = async (req, res) => {
   try {
     const { studentId } = req.query;
@@ -24,7 +24,6 @@ exports.getNotes = async (req, res) => {
   }
 };
 
-// Récupérer une note spécifique
 exports.getNoteById = async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -35,7 +34,6 @@ exports.getNoteById = async (req, res) => {
   }
 };
 
-// Modifier une note
 exports.updateNote = async (req, res) => {
   try {
     const { score, course, semester, studentName, coefficient } = req.body;
@@ -55,7 +53,6 @@ exports.updateNote = async (req, res) => {
   }
 };
 
-// Supprimer une note
 exports.deleteNote = async (req, res) => {
   try {
     const note = await Note.findByIdAndDelete(req.params.id);
@@ -66,59 +63,71 @@ exports.deleteNote = async (req, res) => {
   }
 };
 
-// Moyenne générale pondérée
-exports.getAverage = async (req, res) => {
+// Calcul et stockage des moyennes pour un étudiant
+exports.calculateAndStoreAverages = async (req, res) => {
   try {
     const { studentId } = req.query;
     if (!studentId) return res.status(400).json({ message: 'studentId requis' });
 
-    const result = await Note.aggregate([
-      { $match: { studentId } },
-      {
-        $group: {
-          _id: null,
-          totalScore: { $sum: { $multiply: ['$score', '$coefficient'] } },
-          totalCoeff: { $sum: '$coefficient' }
-        }
-      },
-      {
-        $project: {
-          avgScore: { $divide: ['$totalScore', '$totalCoeff'] }
-        }
-      }
-    ]);
+    const notes = await Note.find({ studentId });
+    if (notes.length === 0) return res.status(404).json({ message: 'Aucune note trouvée' });
 
-    const avg = result[0] ? result[0].avgScore : 0;
-    res.json({ studentId, average: avg });
+    const studentName = notes[0].studentName;
+
+    // Moyenne générale
+    let total = 0, coeff = 0;
+    notes.forEach(n => {
+      total += n.score * n.coefficient;
+      coeff += n.coefficient;
+    });
+    const generalAverage = total / coeff;
+
+    // Moyenne par semestre
+    const semesters = {};
+    notes.forEach(n => {
+      if (!semesters[n.semester]) semesters[n.semester] = { total: 0, coeff: 0 };
+      semesters[n.semester].total += n.score * n.coefficient;
+      semesters[n.semester].coeff += n.coefficient;
+    });
+
+    const averagesBySemester = Object.keys(semesters).map(s => ({
+      semester: Number(s),
+      average: semesters[s].total / semesters[s].coeff
+    }));
+
+    // Stockage dans MongoDB
+    await Average.findOneAndUpdate(
+      { studentId },
+      { studentId, studentName, generalAverage, averagesBySemester },
+      { upsert: true, new: true }
+    );
+
+    res.json({ studentId, studentName, generalAverage, averagesBySemester });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Moyenne par semestre pondérée
-exports.getAverageBySemester = async (req, res) => {
+// Récupérer tous les étudiants avec leurs moyennes
+exports.getStudentsWithAverages = async (req, res) => {
   try {
-    const { studentId } = req.query;
+    const averages = await Average.find().sort({ studentName: 1 });
+    res.json(averages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Récupérer les moyennes stockées d’un étudiant spécifique
+exports.getStoredAverages = async (req, res) => {
+  try {
+    const { studentId } = req.params;
     if (!studentId) return res.status(400).json({ message: 'studentId requis' });
 
-    const result = await Note.aggregate([
-      { $match: { studentId } },
-      {
-        $group: {
-          _id: '$semester',
-          totalScore: { $sum: { $multiply: ['$score', '$coefficient'] } },
-          totalCoeff: { $sum: '$coefficient' }
-        }
-      },
-      {
-        $project: {
-          avgScore: { $divide: ['$totalScore', '$totalCoeff'] }
-        }
-      },
-      { $sort: { _id: 1 } }
-    ]);
+    const avg = await Average.findOne({ studentId });
+    if (!avg) return res.status(404).json({ message: 'Moyennes non trouvées' });
 
-    res.json({ studentId, averagesBySemester: result });
+    res.json(avg);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

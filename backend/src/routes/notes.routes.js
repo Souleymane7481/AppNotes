@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const noteController = require('../controllers/notes.controller');
 
-// CRUD
-router.post('/', noteController.createNote);           // Ajouter une note
-router.get('/', noteController.getNotes);             // Lister toutes les notes ou filtrer par studentId
-router.get('/:id', noteController.getNoteById);       // Récupérer une note spécifique
-router.put('/:id', noteController.updateNote);        // Modifier une note
-router.delete('/:id', noteController.deleteNote);     // Supprimer une note
+// ROUTES SPÉCIALES
+router.get('/calculate-average', noteController.calculateAndStoreAverages); // Calcul + stockage
+router.get('/students-with-average', noteController.getStudentsWithAverages); // Liste des étudiants
+router.get('/average/stored/:studentId', noteController.getStoredAverages);   // Moyennes stockées
 
-// Moyennes pondérées
-router.get('/average/general', noteController.getAverage);          // Moyenne générale
-router.get('/average/semester', noteController.getAverageBySemester); // Moyenne par semestre
+// CRUD Notes
+router.post('/', noteController.createNote);
+router.get('/', noteController.getNotes);
+router.get('/:id', noteController.getNoteById);
+router.put('/:id', noteController.updateNote);
+router.delete('/:id', noteController.deleteNote);
 
 module.exports = router;
